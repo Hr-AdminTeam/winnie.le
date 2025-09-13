@@ -151,3 +151,13 @@ function replyChat(idx) {
     loadHistory();
   }
 }
+
+function clearHistory() {
+  if (confirm("Bạn có chắc chắn muốn xóa toàn bộ lịch sử yêu cầu?")) {
+    // Xóa tất cả yêu cầu của currentUser
+    requests = requests.filter(r => r.user !== currentUser.name);
+    saveData();
+    loadHistory();
+    alert("Đã xóa lịch sử yêu cầu của bạn!");
+  }
+}
