@@ -1,1 +1,44 @@
-
+body {
+  font-family: Arial, sans-serif;
+  background: #f8f8f8;
+}
+.container {
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 20px;
+}
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 6px #ccc;
+}
+.intro {
+  background: #e3f2fd;
+}
+button {
+  margin: 5px;
+  padding: 8px 16px;
+  border-radius: 5px;
+  background: #2196f3;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+button:hover {
+  background: #1769aa;
+}
+.error {
+  color: red;
+}
+#chatBox, #history {
+  margin-top: 16px;
+}
+input, textarea {
+  display: block;
+  margin: 8px 0;
+  padding: 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
