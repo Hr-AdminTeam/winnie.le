@@ -26,7 +26,7 @@ function login() {
   currentUser = user;
   document.getElementById("loginBox").style.display = "none";
   document.getElementById("mainContent").style.display = "block";
-  loadButtons();
+  // loadButtons();
   loadHistory();
 }
 
@@ -58,6 +58,15 @@ function loadButtons() {
   document.getElementById("buttons").innerHTML = btns;
 }
 
+function toggleMenu() {
+  const btnsDiv = document.getElementById("buttons");
+  if (btnsDiv.style.display === "none" || btnsDiv.style.display === "") {
+    loadButtons();
+    btnsDiv.style.display = "block";
+  } else {
+    btnsDiv.style.display = "none";
+  }
+}
 function openChat(category) {
   document.getElementById("chatBox").innerHTML = `
     <div class="card">
