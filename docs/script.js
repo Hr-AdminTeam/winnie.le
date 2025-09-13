@@ -124,12 +124,9 @@ function loadHistory() {
   } else {
     html += "<ul>";
     myRequests.forEach((r, idx) => {
-      const fileLink = r.fileData
-        ? `<a href="${r.fileData}" download="${r.fileName}">Tải file: ${r.fileName}</a>`
-        : "Không có file";
       html += `<li>
         <b>${r.category}</b>: ${r.content} <br/>
-        ${fileLink} <br/>
+        File: ${r.file || "Không có"} <br/>
         Thời gian: ${r.time}
         <button onclick="replyChat(${requests.indexOf(r)})">Phản hồi</button>
         <ul>
