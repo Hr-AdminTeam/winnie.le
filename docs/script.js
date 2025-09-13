@@ -77,20 +77,43 @@ function closeChat() {
 function submitRequest(category) {
   const content = document.getElementById("requestContent").value;
   const fileInput = document.getElementById("requestFile");
-  const fileName = fileInput.files[0]?.name || "";
+  const file = fileInput.files[0];
   const time = new Date().toLocaleString();
-  requests.push({
-    user: currentUser.name,
-    category,
-    content,
-    file: fileName,
-    time,
-    history: []
-  });
-  saveData();
-  alert("Đã gửi yêu cầu! (HR sẽ nhận được thông báo nội bộ)");
-  closeChat();
-  loadHistory();
+
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      // Lưu file base64 vào lịch sử
+      requests.push({
+        user: currentUser.name,
+        category,
+        content,
+        fileName: file.name,
+        fileData: e.target.result, // base64
+        time,
+        history: []
+      });
+      saveData();
+      alert("Đã gửi yêu cầu! (HR sẽ nhận được thông báo nội bộ)");
+      closeChat();
+      loadHistory();
+    };
+    reader.readAsDataURL(file);
+  } else {
+    requests.push({
+      user: currentUser.name,
+      category,
+      content,
+      fileName: "",
+      fileData: "",
+      time,
+      history: []
+    });
+    saveData();
+    alert("Đã gửi yêu cầu! (HR sẽ nhận được thông báo nội bộ)");
+    closeChat();
+    loadHistory();
+  }
 }
 
 function loadHistory() {
