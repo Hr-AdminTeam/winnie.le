@@ -1,44 +1,74 @@
 body {
   font-family: Arial, sans-serif;
-  background: #f8f8f8;
+  background: #fffbe6; /* vàng nhạt */
+  margin: 0;
 }
 .container {
-  max-width: 500px;
+  max-width: 520px;
   margin: 40px auto;
-  padding: 20px;
+  padding: 24px;
+  background: #fffde8; /* vàng nhạt hơn */
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(240, 180, 41, 0.12);
 }
 .card {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  margin-bottom: 16px;
-  box-shadow: 0 2px 6px #ccc;
+  background: #fffdf3; /* vàng rất nhạt */
+  padding: 24px;
+  border-radius: 10px;
+  margin-bottom: 18px;
+  box-shadow: 0 2px 8px rgba(240, 180, 41, 0.07);
 }
 .intro {
-  background: #e3f2fd;
+  background: linear-gradient(90deg,#ffe29a 0%, #fffde4 100%);
+  border-left: 5px solid #ffd940;
 }
 button {
-  margin: 5px;
-  padding: 8px 16px;
-  border-radius: 5px;
-  background: #2196f3;
-  color: white;
+  margin: 6px 4px;
+  padding: 10px 22px;
+  border-radius: 7px;
+  background: linear-gradient(90deg,#ffd940 0%, #ffe29a 100%);
+  color: #7a5c00;
   border: none;
+  font-weight: bold;
+  font-size: 1em;
   cursor: pointer;
+  box-shadow: 0 1px 3px rgba(240,180,41,0.12);
+  transition: background 0.2s, color 0.2s;
 }
 button:hover {
-  background: #1769aa;
+  background: linear-gradient(90deg,#ffe29a 0%, #ffd940 100%);
+  color: #5d4100;
 }
 .error {
-  color: red;
-}
-#chatBox, #history {
-  margin-top: 16px;
+  color: #d47300;
+  font-weight: bold;
+  margin-top: 8px;
 }
 input, textarea {
   display: block;
-  margin: 8px 0;
-  padding: 8px;
+  margin: 10px 0 14px 0;
+  padding: 10px;
   width: 100%;
   box-sizing: border-box;
+  border: 1px solid #ffe29a;
+  border-radius: 6px;
+  background: #fffbe6;
+  font-size: 1em;
+  color: #7a5c00;
+}
+input:focus, textarea:focus {
+  border-color: #ffd940;
+  outline: none;
+  background: #fffde8;
+}
+#chatBox, #history {
+  margin-top: 20px;
+}
+
+h2, h3, h4, p, b, label {
+  color: #7a5c00;
+}
+
+ul {
+  padding-left: 20px;
 }
