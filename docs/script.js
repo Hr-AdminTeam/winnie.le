@@ -7,7 +7,7 @@ let requests = JSON.parse(localStorage.getItem("requests")) || [];
 
 const categories = [
   "Benefits", "Health check up", "Heath Insurance", "HRM system", "Learning & Development",
-  "NPP", "Payroll", "Recruitment", "Social Insurance", "Stationery", "Event", "Others"
+  "NPP", "Payroll", "Recruitment", "Social Insurance", "Stationery", "Others", "Event"
 ];
 
 function saveData() {
@@ -16,7 +16,7 @@ function saveData() {
 }
 
 function login() {
-  const email = document.getElementById("email").value;
+  const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
   const user = users.find(u => u.email === email && u.password === password);
   if (!user) {
@@ -74,6 +74,7 @@ function closeChat() {
   document.getElementById("chatBox").innerHTML = "";
 }
 
+// Lưu file gốc dạng base64 để HR có thể tải lại
 function submitRequest(category) {
   const content = document.getElementById("requestContent").value;
   const fileInput = document.getElementById("requestFile");
@@ -83,7 +84,6 @@ function submitRequest(category) {
   if (file) {
     const reader = new FileReader();
     reader.onload = function(e) {
-      // Lưu file base64 vào lịch sử
       requests.push({
         user: currentUser.name,
         category,
@@ -116,6 +116,7 @@ function submitRequest(category) {
   }
 }
 
+// Hiển thị lịch sử với link tải file đính kèm nếu có
 function loadHistory() {
   let html = "<h4>Lịch sử yêu cầu</h4>";
   const myRequests = requests.filter(r => r.user === currentUser.name);
@@ -124,9 +125,12 @@ function loadHistory() {
   } else {
     html += "<ul>";
     myRequests.forEach((r, idx) => {
+      const fileLink = r.fileData
+        ? `<a href="${r.fileData}" download="${r.fileName}" style="color:#dba600;">Tải file: ${r.fileName}</a>`
+        : "Không có file";
       html += `<li>
         <b>${r.category}</b>: ${r.content} <br/>
-        File: ${r.file || "Không có"} <br/>
+        ${fileLink} <br/>
         Thời gian: ${r.time}
         <button onclick="replyChat(${requests.indexOf(r)})">Phản hồi</button>
         <ul>
@@ -139,6 +143,7 @@ function loadHistory() {
   document.getElementById("history").innerHTML = html;
 }
 
+// HR phản hồi từng yêu cầu
 function replyChat(idx) {
   const msg = prompt("HR phản hồi nội dung:");
   if (msg) {
@@ -152,9 +157,9 @@ function replyChat(idx) {
   }
 }
 
+// Xóa toàn bộ lịch sử yêu cầu của currentUser
 function clearHistory() {
   if (confirm("Bạn có chắc chắn muốn xóa toàn bộ lịch sử yêu cầu?")) {
-    // Xóa tất cả yêu cầu của currentUser
     requests = requests.filter(r => r.user !== currentUser.name);
     saveData();
     loadHistory();
