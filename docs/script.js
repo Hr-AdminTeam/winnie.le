@@ -1,21 +1,43 @@
-// Dữ liệu người dùng và lịch sử (localStorage)
+// Dữ liệu người dùng
 let currentUser = null;
 let users = JSON.parse(localStorage.getItem("users")) || [
-  {email: "test@gmail.com", password: "123456", name: "Test User"}
+  {email: "test@gmail.com", password: "123456", name: "Test User"},
+  {email: "hr@gmail.com", password: "123456", name: "HR"}
 ];
-let requests = JSON.parse(localStorage.getItem("requests")) || [];
 
 const categories = [
   "Benefits", "Health check up", "Heath Insurance", "HRM system", "Learning & Development",
-  "NPP", "Payroll", "Recruitment", "Social Insurance", "Stationery", "Event", "Others"
+  "NPP", "Payroll", "Recruitment", "Social Insurance", "Stationery", "Others", "Event"
 ];
 
-function saveData() {
-  localStorage.setItem("users", JSON.stringify(users));
-  localStorage.setItem("requests", JSON.stringify(requests));
+// Hàm lấy key lịch sử theo ngày
+function getDateKey(date = null) {
+  let d = date ? new Date(date) : new Date();
+  // Định dạng dd-mm-yyyy
+  let dd = String(d.getDate()).padStart(2, '0');
+  let mm = String(d.getMonth() + 1).padStart(2, '0');
+  let yyyy = d.getFullYear();
+  return `requests_${dd}-${mm}-${yyyy}`;
 }
 
-// Khi đăng nhập, KHÔNG gọi loadButtons() nữa, chỉ để hiện nút Menu:
+// Hàm lấy lịch sử của ngày (mặc định là hôm nay)
+function loadRequests(date = null) {
+  const key = getDateKey(date);
+  return JSON.parse(localStorage.getItem(key)) || [];
+}
+
+// Hàm lưu lịch sử của ngày (mặc định là hôm nay)
+function saveRequests(requests, date = null) {
+  const key = getDateKey(date);
+  localStorage.setItem(key, JSON.stringify(requests));
+}
+
+// Lưu dữ liệu người dùng
+function saveUsers() {
+  localStorage.setItem("users", JSON.stringify(users));
+}
+
+// Đăng nhập
 function login() {
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
@@ -27,10 +49,10 @@ function login() {
   currentUser = user;
   document.getElementById("loginBox").style.display = "none";
   document.getElementById("mainContent").style.display = "block";
-  // KHÔNG gọi loadButtons()
   loadHistory();
 }
 
+// Đổi mật khẩu
 function showChangePassword() {
   document.getElementById("mainContent").style.display = "none";
   document.getElementById("changePasswordBox").style.display = "block";
@@ -44,7 +66,7 @@ function changePassword() {
   }
   currentUser.password = newPassword;
   users = users.map(u => u.email === currentUser.email ? currentUser : u);
-  saveData();
+  saveUsers();
   document.getElementById("changePassMsg").innerText = "Đã đổi mật khẩu thành công!";
   setTimeout(() => {
     document.getElementById("changePasswordBox").style.display = "none";
@@ -52,7 +74,7 @@ function changePassword() {
   }, 1200);
 }
 
-// ĐÚNG: Chỉ tạo một nút, dùng class "menu-btn" nếu cần style nhỏ hơn Menu
+// Hiển thị nút chức năng
 function loadButtons() {
   const btns = categories.map(cat =>
     `<button class="menu-btn" onclick="openChat('${cat}')">${cat}</button>`
@@ -60,6 +82,7 @@ function loadButtons() {
   document.getElementById("buttons").innerHTML = btns;
 }
 
+// Hiện/ẩn danh sách chức năng
 function toggleMenu() {
   const btnsDiv = document.getElementById("buttons");
   if (btnsDiv.style.display === "none" || btnsDiv.style.display === "") {
@@ -70,6 +93,7 @@ function toggleMenu() {
   }
 }
 
+// Mở form gửi yêu cầu
 function openChat(category) {
   document.getElementById("chatBox").innerHTML = `
     <div class="card">
@@ -77,77 +101,92 @@ function openChat(category) {
       <input type="text" id="requestName" placeholder="Tên người yêu cầu hỗ trợ" value="${currentUser ? currentUser.name : ''}" />
       <textarea id="requestContent" placeholder="Nội dung cần hỗ trợ"></textarea>
       <input type="file" id="requestFile"/>
-      <button onclick="submitRequest('${category}')">Submit</button>
+      <button onclick="submitRequest('${category}')">Gửi yêu cầu</button>
       <button onclick="closeChat()">Đóng</button>
     </div>
   `;
 }
 
+// Đóng form yêu cầu
 function closeChat() {
   document.getElementById("chatBox").innerHTML = "";
 }
 
-// Lưu file gốc dạng base64 để HR có thể tải lại
+// Gửi yêu cầu (lưu vào lịch sử của ngày)
 function submitRequest(category) {
   const name = document.getElementById("requestName").value || (currentUser ? currentUser.name : "");
   const content = document.getElementById("requestContent").value;
   const fileInput = document.getElementById("requestFile");
   const file = fileInput.files[0];
   const time = new Date().toLocaleString();
+  const todayRequests = loadRequests();
+
+  const reqObj = {
+    user: name,
+    category,
+    content,
+    fileName: file ? file.name : "",
+    fileData: "",
+    time,
+    history: [],
+    done: false // trạng thái xử lý
+  };
 
   if (file) {
     const reader = new FileReader();
     reader.onload = function(e) {
-      requests.push({
-        user: name, // SỬA: lấy tên từ input, không phải currentUser.name
-        category,
-        content,
-        fileName: file.name,
-        fileData: e.target.result, // base64
-        time,
-        history: []
-      });
-      saveData();
+      reqObj.fileData = e.target.result;
+      todayRequests.push(reqObj);
+      saveRequests(todayRequests);
       alert("Đã gửi yêu cầu! (HR sẽ nhận được thông báo nội bộ)");
       closeChat();
       loadHistory();
     };
     reader.readAsDataURL(file);
   } else {
-    requests.push({
-      user: name, // SỬA: lấy tên từ input, không phải currentUser.name
-      category,
-      content,
-      fileName: "",
-      fileData: "",
-      time,
-      history: []
-    });
-    saveData();
+    todayRequests.push(reqObj);
+    saveRequests(todayRequests);
     alert("Đã gửi yêu cầu! (HR sẽ nhận được thông báo nội bộ)");
     closeChat();
     loadHistory();
   }
 }
 
-// Hiển thị lịch sử với link tải file đính kèm nếu có
+// Hiển thị lịch sử yêu cầu của ngày được chọn (mặc định là hôm nay)
 function loadHistory() {
-  let html = "<h4>Lịch sử yêu cầu</h4>";
-  const myRequests = requests.filter(r => r.user === (currentUser ? currentUser.name : ""));
-  if (myRequests.length === 0) {
+  let dateVal = document.getElementById("historyDate") ? document.getElementById("historyDate").value : "";
+  let requestsArr = [];
+  let dateLabel = "";
+  if (dateVal) {
+    // Định dạng yyyy-mm-dd => dd-mm-yyyy
+    const [yyyy, mm, dd] = dateVal.split("-");
+    dateLabel = `${dd}-${mm}-${yyyy}`;
+    requestsArr = loadRequests(dateLabel);
+  } else {
+    const today = new Date();
+    dateLabel = getDateKey().replace("requests_", "");
+    requestsArr = loadRequests();
+  }
+  let html = `<h4>Lịch sử yêu cầu ngày ${dateLabel}</h4>`;
+  if (requestsArr.length === 0) {
     html += "<p>Chưa có yêu cầu nào.</p>";
   } else {
     html += "<ul>";
-    myRequests.forEach((r, idx) => {
+    requestsArr.forEach((r, idx) => {
       const fileLink = r.fileData
         ? `<a href="${r.fileData}" download="${r.fileName}" style="color:#dba600;">Tải file: ${r.fileName}</a>`
         : "Không có file";
-      html += `<li>
-        <b>${r.category}</b> - <i>${r.user}</i><br/> 
-        Thời gian: ${r.time}<br/> 
-        Nội dung: ${r.content}<br/> 
+      // Chọn màu theo trạng thái
+      const itemColor = r.done ? "#169c23" : "#e12929";
+      const statusText = r.done ? "Đã xử lý (Done)" : "Chưa xử lý";
+      html += `<li style="border-left:6px solid ${itemColor};padding-left:8px; margin-bottom:8px;">
+        <b>${r.category}</b> - <i>Người gửi: ${r.user}</i><br/>
+        Nội dung: ${r.content} <br/>
         ${fileLink} <br/>
-        <button onclick="replyChat(${requests.indexOf(r)})">Phản hồi</button>
+        Thời gian: ${r.time} <br/>
+        <span style="color:${itemColor};font-weight:bold;">${statusText}</span>
+        <button onclick="replyChat(${idx})">Phản hồi</button>
+        ${!r.done ? `<button onclick="markDone(${idx})">Đánh dấu Done</button>` : ""}
         <ul>
           ${r.history.map(h => `<li>${h.from}: ${h.message} (${h.time})</li>`).join('')}
         </ul>
@@ -158,27 +197,76 @@ function loadHistory() {
   document.getElementById("history").innerHTML = html;
 }
 
-// Người đăng nhập phản hồi từng yêu cầu
+// Đánh dấu yêu cầu là Done (HR bấm)
+function markDone(idx) {
+  let dateVal = document.getElementById("historyDate") ? document.getElementById("historyDate").value : "";
+  let requestsArr = [];
+  if (dateVal) {
+    const [yyyy, mm, dd] = dateVal.split("-");
+    const dateLabel = `${dd}-${mm}-${yyyy}`;
+    requestsArr = loadRequests(dateLabel);
+    requestsArr[idx].done = true;
+    saveRequests(requestsArr, dateLabel);
+  } else {
+    requestsArr = loadRequests();
+    requestsArr[idx].done = true;
+    saveRequests(requestsArr);
+  }
+  loadHistory();
+}
+
+// Phản hồi yêu cầu: bất kỳ ai đăng nhập đều phản hồi được
 function replyChat(idx) {
+  let dateVal = document.getElementById("historyDate") ? document.getElementById("historyDate").value : "";
+  let requestsArr = [];
+  if (dateVal) {
+    const [yyyy, mm, dd] = dateVal.split("-");
+    const dateLabel = `${dd}-${mm}-${yyyy}`;
+    requestsArr = loadRequests(dateLabel);
+  } else {
+    requestsArr = loadRequests();
+  }
   const msg = prompt("Nhập nội dung phản hồi:");
   if (msg) {
     const responder = currentUser && currentUser.name ? currentUser.name : "Người dùng";
-    requests[idx].history.push({
+    requestsArr[idx].history.push({
       from: responder,
       message: msg,
       time: new Date().toLocaleString()
     });
-    saveData();
+    if (dateVal) {
+      const [yyyy, mm, dd] = dateVal.split("-");
+      const dateLabel = `${dd}-${mm}-${yyyy}`;
+      saveRequests(requestsArr, dateLabel);
+    } else {
+      saveRequests(requestsArr);
+    }
     loadHistory();
   }
 }
 
-// Xóa toàn bộ lịch sử yêu cầu của currentUser
+// Xóa toàn bộ lịch sử yêu cầu của currentUser trong ngày đang xem
 function clearHistory() {
-  if (confirm("Bạn có chắc chắn muốn xóa toàn bộ lịch sử yêu cầu?")) {
-    requests = requests.filter(r => r.user !== (currentUser ? currentUser.name : ""));
-    saveData();
+  if (confirm("Bạn có chắc chắn muốn xóa toàn bộ lịch sử yêu cầu của bạn trong ngày đang xem?")) {
+    let dateVal = document.getElementById("historyDate") ? document.getElementById("historyDate").value : "";
+    let requestsArr = [];
+    if (dateVal) {
+      const [yyyy, mm, dd] = dateVal.split("-");
+      const dateLabel = `${dd}-${mm}-${yyyy}`;
+      requestsArr = loadRequests(dateLabel);
+      requestsArr = requestsArr.filter(r => r.user !== (currentUser ? currentUser.name : ""));
+      saveRequests(requestsArr, dateLabel);
+    } else {
+      requestsArr = loadRequests();
+      requestsArr = requestsArr.filter(r => r.user !== (currentUser ? currentUser.name : ""));
+      saveRequests(requestsArr);
+    }
     loadHistory();
-    alert("Đã xóa lịch sử yêu cầu của bạn!");
+    alert("Đã xóa lịch sử yêu cầu của bạn trong ngày đang xem!");
   }
+}
+
+// Xem lịch sử theo ngày chọn
+function onChangeHistoryDate() {
+  loadHistory();
 }
