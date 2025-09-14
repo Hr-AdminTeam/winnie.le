@@ -7,7 +7,7 @@ let requests = JSON.parse(localStorage.getItem("requests")) || [];
 
 const categories = [
   "Benefits", "Health check up", "Heath Insurance", "HRM system", "Learning & Development",
-  "NPP", "Payroll", "Recruitment", "Social Insurance", "Stationery", "Others", "Event"
+  "NPP", "Payroll", "Recruitment", "Social Insurance", "Stationery", "Event", "Others"
 ];
 
 function saveData() {
