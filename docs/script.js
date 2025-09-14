@@ -15,6 +15,7 @@ function saveData() {
   localStorage.setItem("requests", JSON.stringify(requests));
 }
 
+// Khi đăng nhập, KHÔNG gọi loadButtons() nữa, chỉ để hiện nút Menu:
 function login() {
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
@@ -54,6 +55,7 @@ function changePassword() {
 function loadButtons() {
   const btns = categories.map(cat =>
     `<button onclick="openChat('${cat}')">${cat}</button>`
+     `<button class="menu-btn" onclick="openChat('${cat}')">${cat}</button>`                         
   ).join('');
   document.getElementById("buttons").innerHTML = btns;
 }
@@ -63,6 +65,7 @@ function toggleMenu() {
   if (btnsDiv.style.display === "none" || btnsDiv.style.display === "") {
     loadButtons();
     btnsDiv.style.display = "block";
+     btnsDiv.style.display = "flex";
   } else {
     btnsDiv.style.display = "none";
   }
