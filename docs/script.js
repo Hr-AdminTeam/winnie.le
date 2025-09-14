@@ -27,7 +27,7 @@ function login() {
   currentUser = user;
   document.getElementById("loginBox").style.display = "none";
   document.getElementById("mainContent").style.display = "block";
-  // loadButtons();
+  // KHÔNG gọi loadButtons()
   loadHistory();
 }
 
@@ -52,10 +52,10 @@ function changePassword() {
   }, 1200);
 }
 
+// ĐÚNG: Chỉ tạo một nút, dùng class "menu-btn" nếu cần style nhỏ hơn Menu
 function loadButtons() {
   const btns = categories.map(cat =>
-    `<button onclick="openChat('${cat}')">${cat}</button>`
-     `<button class="menu-btn" onclick="openChat('${cat}')">${cat}</button>`                         
+    `<button class="menu-btn" onclick="openChat('${cat}')">${cat}</button>`
   ).join('');
   document.getElementById("buttons").innerHTML = btns;
 }
@@ -64,12 +64,12 @@ function toggleMenu() {
   const btnsDiv = document.getElementById("buttons");
   if (btnsDiv.style.display === "none" || btnsDiv.style.display === "") {
     loadButtons();
- //   btnsDiv.style.display = "block";
-     btnsDiv.style.display = "flex";
+    btnsDiv.style.display = "flex";
   } else {
     btnsDiv.style.display = "none";
   }
 }
+
 function openChat(category) {
   document.getElementById("chatBox").innerHTML = `
     <div class="card">
@@ -99,7 +99,7 @@ function submitRequest(category) {
     const reader = new FileReader();
     reader.onload = function(e) {
       requests.push({
-        user: currentUser.name,
+        user: name, // SỬA: lấy tên từ input, không phải currentUser.name
         category,
         content,
         fileName: file.name,
@@ -115,7 +115,7 @@ function submitRequest(category) {
     reader.readAsDataURL(file);
   } else {
     requests.push({
-      user: currentUser.name,
+      user: name, // SỬA: lấy tên từ input, không phải currentUser.name
       category,
       content,
       fileName: "",
@@ -133,7 +133,7 @@ function submitRequest(category) {
 // Hiển thị lịch sử với link tải file đính kèm nếu có
 function loadHistory() {
   let html = "<h4>Lịch sử yêu cầu</h4>";
-  const myRequests = requests.filter(r => r.user === currentUser.name);
+  const myRequests = requests.filter(r => r.user === (currentUser ? currentUser.name : ""));
   if (myRequests.length === 0) {
     html += "<p>Chưa có yêu cầu nào.</p>";
   } else {
@@ -174,7 +174,7 @@ function replyChat(idx) {
 // Xóa toàn bộ lịch sử yêu cầu của currentUser
 function clearHistory() {
   if (confirm("Bạn có chắc chắn muốn xóa toàn bộ lịch sử yêu cầu?")) {
-    requests = requests.filter(r => r.user !== currentUser.name);
+    requests = requests.filter(r => r.user !== (currentUser ? currentUser.name : ""));
     saveData();
     loadHistory();
     alert("Đã xóa lịch sử yêu cầu của bạn!");
