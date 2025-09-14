@@ -35,6 +35,14 @@
       <div id="history"></div>
     </div>
 
+    <div class="card" style="margin-bottom:10px;">
+      <label for="searchUser">Tìm theo tên người gửi:</label>
+      <input type="text" id="searchUser" placeholder="Nhập tên hoặc email..." oninput="searchRequests()">
+
+      <label for="searchCategory">Tìm theo chức năng:</label>
+      <input type="text" id="searchCategory" placeholder="Nhập tên chức năng..." oninput="searchRequests()">
+    </div>
+    
     <div id="changePasswordBox" class="card" style="display:none;">
       <h3>Đổi mật khẩu</h3>
       <input type="password" id="newPassword" placeholder="Mật khẩu mới" />
