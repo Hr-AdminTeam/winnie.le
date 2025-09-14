@@ -74,6 +74,7 @@ function openChat(category) {
   document.getElementById("chatBox").innerHTML = `
     <div class="card">
       <h4>${category}</h4>
+      <input type="text" id="requestName" placeholder="Tên người yêu cầu hỗ trợ" value="${currentUser ? currentUser.name : ''}" />
       <textarea id="requestContent" placeholder="Nội dung cần hỗ trợ"></textarea>
       <input type="file" id="requestFile"/>
       <button onclick="submitRequest('${category}')">Submit</button>
@@ -88,6 +89,7 @@ function closeChat() {
 
 // Lưu file gốc dạng base64 để HR có thể tải lại
 function submitRequest(category) {
+  const name = document.getElementById("requestName").value || (currentUser ? currentUser.name : "");
   const content = document.getElementById("requestContent").value;
   const fileInput = document.getElementById("requestFile");
   const file = fileInput.files[0];
