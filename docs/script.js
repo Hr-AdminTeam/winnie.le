@@ -143,9 +143,10 @@ function loadHistory() {
         ? `<a href="${r.fileData}" download="${r.fileName}" style="color:#dba600;">Tải file: ${r.fileName}</a>`
         : "Không có file";
       html += `<li>
-        <b>${r.category}</b>: ${r.content} <br/>
-        ${fileLink} <br/>
+        <b>${r.category}</b> - <i>${r.user}</i><br/> 
         Thời gian: ${r.time}
+        Nội dung: ${r.content} <br/>
+        ${fileLink} <br/>
         <button onclick="replyChat(${requests.indexOf(r)})">Phản hồi</button>
         <ul>
           ${r.history.map(h => `<li>${h.from}: ${h.message} (${h.time})</li>`).join('')}
