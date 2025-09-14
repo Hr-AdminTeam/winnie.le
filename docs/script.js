@@ -145,7 +145,7 @@ function loadHistory() {
       html += `<li>
         <b>${r.category}</b> - <i>${r.user}</i><br/> 
         Thời gian: ${r.time}
-        Nội dung: ${r.content} <br/>
+        Nội dung: ${r.content} <br/> (${r.time})
         ${fileLink} <br/>
         <button onclick="replyChat(${requests.indexOf(r)})">Phản hồi</button>
         <ul>
