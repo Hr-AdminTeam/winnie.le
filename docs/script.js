@@ -284,10 +284,8 @@ function searchRequests() {
     dateLabel = getDateKey().replace("requests_", "");
     requestsArr = loadRequests();
   }
-
   const searchUser = document.getElementById("searchUser").value.toLowerCase();
   const searchCategory = document.getElementById("searchCategory").value.toLowerCase();
-
   let filtered = requestsArr;
 
   // Lọc theo tên người gửi
