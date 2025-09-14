@@ -12,7 +12,7 @@
       <h2>Đăng nhập</h2>
       <input type="email" id="email" placeholder="Email" />
       <input type="password" id="password" placeholder="Mật khẩu" value="123456" />
-      <button onclick="login()">Đăng nhập</button>
+      <button onclick="login()" class="menu-main">Đăng nhập</button>
       <div id="loginError" class="error"></div>
     </div>
 
@@ -25,21 +25,23 @@
         <button id="menuButton" onclick="toggleMenu()" class="menu-main">Menu</button>
         <div id="buttons" class="menu-sub" style="display:none;"></div>
       </div>
-      <button onclick="showChangePassword()">Đổi mật khẩu</button>
-      <button onclick="clearHistory()" style="background:#ffe29a;color:#7a5c00;">Xóa lịch sử yêu cầu</button>
+      <button onclick="showChangePassword()" class="menu-main">Đổi mật khẩu</button>
+      <button onclick="clearHistory()" class="menu-main">Xóa lịch sử yêu cầu</button>
       <div id="chatBox"></div>
+      <div style="margin-top:20px;">
+        <label for="historyDate">Xem lịch sử theo ngày:</label>
+        <input type="date" id="historyDate" onchange="onChangeHistoryDate()" style="margin-bottom:10px;">
+      </div>
       <div id="history"></div>
     </div>
 
     <div id="changePasswordBox" class="card" style="display:none;">
       <h3>Đổi mật khẩu</h3>
       <input type="password" id="newPassword" placeholder="Mật khẩu mới" />
-      <button onclick="changePassword()">Lưu</button>
+      <button onclick="changePassword()" class="menu-main">Lưu</button>
       <div id="changePassMsg"></div>
     </div>
   </div>
   <script src="script.js"></script>
 </body>
 </html>
-<button onclick="showChangePassword()" class="menu-main">Đổi mật khẩu</button>
-<button onclick="clearHistory()" class="menu-main">Xóa lịch sử yêu cầu</button>
