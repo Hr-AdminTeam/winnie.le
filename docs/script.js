@@ -270,3 +270,60 @@ function clearHistory() {
 function onChangeHistoryDate() {
   loadHistory();
 }
+
+function searchRequests() {
+  let dateVal = document.getElementById("historyDate") ? document.getElementById("historyDate").value : "";
+  let requestsArr = [];
+  let dateLabel = "";
+  if (dateVal) {
+    const [yyyy, mm, dd] = dateVal.split("-");
+    dateLabel = `${dd}-${mm}-${yyyy}`;
+    requestsArr = loadRequests(dateLabel);
+  } else {
+    dateLabel = getDateKey().replace("requests_", "");
+    requestsArr = loadRequests();
+  }
+
+  const searchUser = document.getElementById("searchUser").value.toLowerCase();
+  const searchCategory = document.getElementById("searchCategory").value.toLowerCase();
+
+  let filtered = requestsArr;
+
+  // Lọc theo tên người gửi
+  if (searchUser) {
+    filtered = filtered.filter(r => r.user.toLowerCase().includes(searchUser));
+  }
+
+  // Lọc theo chức năng
+  if (searchCategory) {
+    filtered = filtered.filter(r => r.category.toLowerCase().includes(searchCategory));
+  }
+
+  let html = `<h4>Kết quả tìm kiếm yêu cầu ngày ${dateLabel}</h4>`;
+  if (filtered.length === 0) {
+    html += "<p>Không tìm thấy yêu cầu phù hợp.</p>";
+  } else {
+    html += "<ul>";
+    filtered.forEach((r, idx) => {
+      const fileLink = r.fileData
+        ? `<a href="${r.fileData}" download="${r.fileName}" style="color:#dba600;">Tải file: ${r.fileName}</a>`
+        : "Không có file";
+      const itemColor = r.done ? "#169c23" : "#e12929";
+      const statusText = r.done ? "Đã xử lý (Done)" : "Chưa xử lý";
+      html += `<li style="border-left:6px solid ${itemColor};padding-left:8px; margin-bottom:8px;">
+        <b>${r.category}</b> - <i>Người gửi: ${r.user}</i><br/>
+        Nội dung: ${r.content} <br/>
+        ${fileLink} <br/>
+        Thời gian: ${r.time} <br/>
+        <span style="color:${itemColor};font-weight:bold;">${statusText}</span>
+        <button onclick="replyChat(${idx})">Phản hồi</button>
+        ${!r.done ? `<button onclick="markDone(${idx})">Đánh dấu Done</button>` : ""}
+        <ul>
+          ${r.history.map(h => `<li>${h.from}: ${h.message} (${h.time})</li>`).join('')}
+        </ul>
+      </li>`;
+    });
+    html += "</ul>";
+  }
+  document.getElementById("history").innerHTML = html;
+}
