@@ -23,7 +23,7 @@ body {
   border-left: 5px solid #ffd940;
 }
 
-/* Nút Menu chính */
+/* Nút Menu chính và các nút lớn */
 .menu-main {
   font-family: 'Times New Roman', Times, serif;
   font-size: 1.1em;
@@ -35,7 +35,13 @@ body {
   font-weight: bold;
   box-shadow: 0 2px 8px rgba(240, 180, 41, 0.07);
   margin-bottom: 7px;
+  margin-right: 6px;
   cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.menu-main:hover {
+  background: linear-gradient(90deg,#ffe29a 0%, #ffd940 100%);
+  color: #5d4100;
 }
 
 /* Khung chứa các nút con */
@@ -117,4 +123,12 @@ h2, h3, h4, p, b, label {
 
 ul {
   padding-left: 20px;
+}
+
+/* Đánh dấu màu cho Done/Chưa Done trong lịch sử */
+li[style*="border-left:6px solid #169c23"] {
+  background: #eaf8ee;
+}
+li[style*="border-left:6px solid #e12929"] {
+  background: #fff0f0;
 }
