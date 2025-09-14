@@ -144,8 +144,8 @@ function loadHistory() {
         : "Không có file";
       html += `<li>
         <b>${r.category}</b> - <i>${r.user}</i><br/> 
-        Thời gian: ${r.time}
-        Nội dung: ${r.content} <br/> (${r.time})
+        Thời gian: ${r.time} <br/> 
+        Nội dung: ${r.content} <br/> 
         ${fileLink} <br/>
         <button onclick="replyChat(${requests.indexOf(r)})">Phản hồi</button>
         <ul>
