@@ -64,7 +64,7 @@ function toggleMenu() {
   const btnsDiv = document.getElementById("buttons");
   if (btnsDiv.style.display === "none" || btnsDiv.style.display === "") {
     loadButtons();
-    btnsDiv.style.display = "block";
+ //   btnsDiv.style.display = "block";
      btnsDiv.style.display = "flex";
   } else {
     btnsDiv.style.display = "none";
