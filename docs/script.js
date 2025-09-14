@@ -269,6 +269,7 @@ function clearHistory() {
 // Xem lịch sử theo ngày chọn
 function onChangeHistoryDate() {
   loadHistory();
+  searchRequests(); //Khi thay đổi ngày, gọi cả searchRequests() để kết quả tìm kiếm cập nhật theo ngày mới:
 }
 
 function searchRequests() {
