@@ -13,6 +13,64 @@ body {
 }
 .card {
   background: #fffdf3; /* vàng rất nhạt */
+    background: #fffbe6;
+    margin: 0;
+}
+
+/* Nút Menu chính */
+.menu-main {
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 1.1em;
+  background: linear-gradient(90deg,#ffd940 0%, #ffe29a 100%);
+  color: #7a5c00;
+  padding: 12px 28px;
+  border-radius: 8px;
+  border: none;
+  font-weight: bold;
+  box-shadow: 0 2px 8px rgba(240, 180, 41, 0.07);
+  margin-bottom: 7px;
+  cursor: pointer;
+}
+
+/* Khung chứa các nút con */
+.menu-sub {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+/* Nút chức năng con */
+.menu-btn {
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 0.93em;
+  padding: 7px 17px;
+  border-radius: 6px;
+  background: #ffe29a;
+  color: #7a5c00;
+  border: 1px solid #ffd940;
+  font-weight: normal;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(240,180,41,0.10);
+  transition: background 0.2s, color 0.2s;
+}
+
+.menu-btn:hover {
+  background: #ffd940;
+  color: #5d4100;
+}
+
+/* Giữ lại các style cũ */
+.container {
+  max-width: 520px;
+  margin: 40px auto;
+  padding: 24px;
+  background: #fffde8;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(240, 180, 41, 0.12);
+}
+.card {
+  background: #fffdf3;
   padding: 24px;
   border-radius: 10px;
   margin-bottom: 18px;
@@ -23,6 +81,7 @@ body {
   border-left: 5px solid #ffd940;
 }
 button {
+  button:not(.menu-btn):not(.menu-main) {
   margin: 6px 4px;
   padding: 10px 22px;
   border-radius: 7px;
@@ -36,6 +95,7 @@ button {
   transition: background 0.2s, color 0.2s;
 }
 button:hover {
+  button:not(.menu-btn):not(.menu-main):hover {
   background: linear-gradient(90deg,#ffe29a 0%, #ffd940 100%);
   color: #5d4100;
 }
