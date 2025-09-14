@@ -157,12 +157,13 @@ function loadHistory() {
   document.getElementById("history").innerHTML = html;
 }
 
-// HR phản hồi từng yêu cầu
+// Người đăng nhập phản hồi từng yêu cầu
 function replyChat(idx) {
-  const msg = prompt("HR phản hồi nội dung:");
+  const msg = prompt("Nhập nội dung phản hồi:");
   if (msg) {
+    const responder = currentUser && currentUser.name ? currentUser.name : "Người dùng";
     requests[idx].history.push({
-      from: "HR",
+      from: responder,
       message: msg,
       time: new Date().toLocaleString()
     });
