@@ -132,3 +132,10 @@ li[style*="border-left:6px solid #169c23"] {
 li[style*="border-left:6px solid #e12929"] {
   background: #fff0f0;
 }
+
+.message-card .action-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-bottom: 10px;
+}
