@@ -3,6 +3,7 @@ let currentUser = null;
 let users = JSON.parse(localStorage.getItem("users")) || [
   {email: "test@gmail.com", password: "123456", name: "Test User"},
   {email: "hr@gmail.com", password: "123456", name: "HR"}
+  {email: "LD@gmail.com", password: "123456", name: "LD"}
 ];
 
 const categories = [
