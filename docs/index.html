@@ -34,23 +34,6 @@
       </div>
       <div id="history"></div>
 
-`    <li style="border-left:6px solid ${itemColor};padding-left:8px; margin-bottom:8px;" class="message-card">
-      <div class="action-buttons">
-      <button onclick="replyChat(${idx})">Phản hồi</button>
-    ${!r.done ? `<button onclick="markDone(${idx})">Đánh dấu Done</button>` : ""}
-    </div>
-    <div>
-    <b>${r.category}</b> - <i>Người gửi: ${r.user}</i><br/>
-    Nội dung: ${r.content} <br/>
-    ${fileLink} <br/>
-    Thời gian: ${r.time} <br/>
-    <span style="color:${itemColor};font-weight:bold;">${statusText}</span>
-    <ul>
-      ${r.history.map(h => `<li>${h.from}: ${h.message} (${h.time})</li>`).join('')}
-    </ul>
-    </div>
-  </li>`;
-      
        <div class="card" style="margin-bottom:10px;">
       <label for="searchUser">Tìm theo tên người gửi:</label>
       <input type="text" id="searchUser" placeholder="Nhập tên hoặc email..." oninput="searchRequests()">
