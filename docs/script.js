@@ -157,8 +157,8 @@ function loadHistory() {
   let dateVal = document.getElementById("historyDate") ? document.getElementById("historyDate").value : "";
   let requestsArr = [];
   let dateLabel = "";
+
   if (dateVal) {
-    // Định dạng yyyy-mm-dd => dd-mm-yyyy
     const [yyyy, mm, dd] = dateVal.split("-");
     dateLabel = `${dd}-${mm}-${yyyy}`;
     requestsArr = loadRequests(dateLabel);
@@ -167,6 +167,7 @@ function loadHistory() {
     dateLabel = getDateKey().replace("requests_", "");
     requestsArr = loadRequests();
   }
+
   let html = `<h4>Lịch sử yêu cầu ngày ${dateLabel}</h4>`;
   if (requestsArr.length === 0) {
     html += "<p>Chưa có yêu cầu nào.</p>";
@@ -176,26 +177,35 @@ function loadHistory() {
       const fileLink = r.fileData
         ? `<a href="${r.fileData}" download="${r.fileName}" style="color:#dba600;">Tải file: ${r.fileName}</a>`
         : "Không có file";
-      // Chọn màu theo trạng thái
+
       const itemColor = r.done ? "#169c23" : "#e12929";
       const statusText = r.done ? "Đã xử lý (Done)" : "Chưa xử lý";
-      html += `<li style="border-left:6px solid ${itemColor};padding-left:8px; margin-bottom:8px;">
-        <b>${r.category}</b> - <i>Người gửi: ${r.user}</i><br/>
-        Nội dung: ${r.content} <br/>
-        ${fileLink} <br/>
-        Thời gian: ${r.time} <br/>
-        <span style="color:${itemColor};font-weight:bold;">${statusText}</span>
-        <button onclick="replyChat(${idx})">Phản hồi</button>
-        ${!r.done ? `<button onclick="markDone(${idx})">Đánh dấu Done</button>` : ""}
-        <ul>
-          ${r.history.map(h => `<li>${h.from}: ${h.message} (${h.time})</li>`).join('')}
-        </ul>
-      </li>`;
+
+      html += `
+        <li style="border-left:6px solid ${itemColor}; padding:10px; margin-bottom:10px;" class="message-card">
+          <div class="action-buttons">
+            <button onclick="replyChat(${idx})">Phản hồi</button>
+            ${!r.done ? `<button onclick="markDone(${idx})">Đánh dấu Done</button>` : ""}
+          </div>
+          <div>
+            <b>${r.category}</b> - <i>Người gửi: ${r.user}</i><br/>
+            Nội dung: ${r.content} <br/>
+            ${fileLink} <br/>
+            Thời gian: ${r.time} <br/>
+            <span style="color:${itemColor}; font-weight:bold;">${statusText}</span>
+            <ul>
+              ${r.history.map(h => `<li>${h.from}: ${h.message} (${h.time})</li>`).join('')}
+            </ul>
+          </div>
+        </li>
+      `;
     });
     html += "</ul>";
   }
+
   document.getElementById("history").innerHTML = html;
 }
+
 
 // Đánh dấu yêu cầu là Done (HR bấm)
 function markDone(idx) {
